@@ -23,6 +23,21 @@ variable "num_of_static_nat_ips" {
   default     = 1
 }
 
+variable "nat_subnet" {
+  description = "How NAT should be configured per Subnetwork. Possible values are ALL_SUBNETWORKS_ALL_IP_RANGES, ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, and LIST_OF_SUBNETWORKS"
+  type        = string
+}
+
+variable "subnet_id" {
+  description = "Subnetwork ID to NAT"
+  type        = string
+}
+
+variable "source_ip_ranges_to_nat" {
+  description = "List of options for which source IPs in the subnetwork should have NAT enabled. Supported values include: ALL_IP_RANGES, LIST_OF_SECONDARY_IP_RANGES, PRIMARY_IP_RANGE."
+  type        = list(string)
+}
+
 variable "router_timeout" {
   description = "how long a Cloud Router operation is allowed to take before being considered a failure."
   type        = string

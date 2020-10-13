@@ -8,6 +8,12 @@ locals {
   name_static_nat_ips    = "hk-nat-ip"
   nat_ip_allocate_option = var.num_of_static_nat_ips > 0 ? "MANUAL_ONLY" : "AUTO_ONLY"
   nat_ips                = local.nat_ip_allocate_option == "MANUAL_ONLY" ? google_compute_address.static_nat_ips.*.self_link : []
+  source_subnetwork_ip_ranges_to_nat = 
+    var.nat_subnet == "LIST_OF_SUBNETWORKS" ? 
+      subnetwork {
+        name                    = var.subnet_id
+        source_ip_ranges_to_nat = [var.source_ip_ranges_to_nat]
+      } : []
 }
 
 resource "google_project_service" "networking_api" {
@@ -36,7 +42,7 @@ resource "google_compute_router_nat" "cloud_nat" {
   name                               = local.cloud_nat_name #hk-cloud-nat-tfdev-19cr
   router                             = google_compute_router.cloud_router.name
   region                             = google_compute_router.cloud_router.region
-  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+  source_subnetwork_ip_ranges_to_nat = local.source_subnetwork_ip_ranges_to_nat
   depends_on                         = [google_project_service.networking_api]
   nat_ip_allocate_option             = local.nat_ip_allocate_option
   nat_ips                            = local.nat_ips
