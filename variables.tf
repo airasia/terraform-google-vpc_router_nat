@@ -60,3 +60,9 @@ variable "nat_timeout" {
   type        = string
   default     = "10m"
 }
+
+variable "nat_min_ports_per_vm" {
+  description = "Minimum number of ports reserved by the Cloud NAT for each VM. The number of ports that a Cloud NAT reserves for each VM limits the number of concurrent connections that the VM can make to a specific destination (https://cloud.google.com/nat/docs/ports-and-addresses#ports-and-connections). Each NAT IP supports upto 64,512 ports (65,536 minus 1,024 - https://cloud.google.com/nat/docs/ports-and-addresses#ports). If var.num_of_static_nat_ips is 1 and var.nat_min_ports_per_vm is 64, then the total number of VMs that can be serviced by that Cloud NAT is (1 * 64512 / 64) = 1008 VMs. https://cloud.google.com/nat/docs/ports-and-addresses#port-reservation-examples. As the total number of serviceable VMs increases, the total number of concurrent connections spawnable by a VM decreases. 64 is the default value provided by Google."
+  type        = number
+  default     = 64
+}
