@@ -70,5 +70,5 @@ variable "nat_min_ports_per_vm" {
 variable "nat_enable_endpoint_independent_mapping" {
   type        = bool
   description = "Specifies if endpoint independent mapping is enabled."
-  default     = null
+  default     = false
 }
